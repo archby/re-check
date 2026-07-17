@@ -38,8 +38,8 @@ def scan_directory(target_folder):
                 already_deleted.add(j)
 
 if __name__ == "__main__":
-    test_path = "./testfolder"
-    if os.path.exists(test_path):
+    test_path = str(input("Enter the folder's path, both absolute and relative paths work: "))
+    if os.path.exists(test_path) and os.path.isdir(test_path):
         scan_directory(test_path)
     else:
-        print(f"Error: The path '{test_path}' does not exist. Please create it or update the script.")
+        print(f"Error: The path '{test_path}' does not exist.")
