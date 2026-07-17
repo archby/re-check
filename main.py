@@ -1,4 +1,15 @@
 import os
+import hashlib
+
+def calculate_256(file_path):
+    sha256 = hashlib.sha256()
+    try:
+        with open(file_path, "rb") as f:
+            for b_block in iter(lambda: f.read(4096), b""):
+                sha256.update(b_block)
+        return sha256.hexdigest()
+    except (PermissionError, FileNotFoundError):
+        return None
 
 def scan_directory(target_folder):
     print(f"Scanning directory: {target_folder}\n")
