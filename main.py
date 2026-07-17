@@ -11,13 +11,31 @@ def calculate_256(file_path):
     except (PermissionError, FileNotFoundError):
         return None
 
+
 def scan_directory(target_folder):
-    print(f"Scanning directory: {target_folder}\n")
-    for root_dir, subfolders, filenames in os.walk(target_folder):
+    file_paths = []
+    hashes = []
+
+    print(f"--- Scanning directory: {target_folder} ---\n")
+    for root_dir, _, filenames in os.walk(target_folder):
         for filename in filenames:
             full_path = os.path.join(root_dir, filename)
-            print(f"Found file: {full_path}")
-
+            file_hash = calculate_256(full_path)
+            if file_hash:
+                file_paths.append(full_path)
+                hashes.append(file_hash)
+    already_deleted = set()
+    for i in range(len(hashes)):
+        if i in already_deleted:
+            continue
+        for j in range(i + 1, len(hashes)):
+            if j in already_deleted:
+                continue
+            if hashes[i] == hashes[j]:
+                print(f"[!] Duplicate found!")
+                print(f"   Original: {file_paths[i]}")
+                print(f"   Duplicate: {file_paths[j]}\n")
+                already_deleted.add(j)
 
 if __name__ == "__main__":
     test_path = "./testfolder"
